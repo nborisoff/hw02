@@ -54,7 +54,7 @@ export const inputCheckErrorsMiddleware = (
   next: NextFunction,
 ) => {
   const e = validationResult(req);
-  const errors = e.array();
+  const errors = e.array({ onlyFirstError: true });
 
   if (errors.length) {
     res.status(400).json({
