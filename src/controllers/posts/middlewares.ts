@@ -78,7 +78,7 @@ export const authMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
-  const auth = req.headers["authorisation"] as string; // 'Basic xxxx'
+  const auth = req.headers["authorization"] as string; // 'Basic xxxx'
 
   if (!auth) {
     res.status(401).json({});

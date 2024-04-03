@@ -23,11 +23,11 @@ blogRouter.post(
 blogRouter.get("/:id", findBlog);
 blogRouter.put(
   "/:id",
-  // authMiddleware,
+  authMiddleware,
   ...blogInputValidators,
   inputCheckErrorsMiddleware,
   updateBlog,
 );
 blogRouter.delete("/:id",
-    // authMiddleware,
+    authMiddleware,
     deleteBlog);
