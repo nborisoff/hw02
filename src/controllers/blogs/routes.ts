@@ -15,7 +15,7 @@ export const blogRouter = Router();
 blogRouter.get("/", getBlogs);
 blogRouter.post(
   "/",
-  // authMiddleware,
+  authMiddleware,
   ...blogInputValidators,
   inputCheckErrorsMiddleware,
   createBlog,
