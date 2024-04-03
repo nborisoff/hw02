@@ -16,7 +16,7 @@ const postTitleInputValidator = body("title")
   .trim()
   .notEmpty()
   .withMessage("field is empty")
-  .isLength({ max: 100 })
+  .isLength({ max: 30 })
   .withMessage("length limit exceeded");
 const postShortDescriptionInputValidator = body("shortDescription")
   .exists()

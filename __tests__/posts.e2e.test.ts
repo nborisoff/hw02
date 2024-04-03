@@ -31,7 +31,7 @@ describe("/post", () => {
     setDB("blogs", existedBlogDataset);
 
     const newPost = {
-      title: "   ",
+      title: "testT",
       shortDescription: "testSD",
       content: "testC",
       blogId: "1",
