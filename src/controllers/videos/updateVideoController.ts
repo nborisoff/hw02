@@ -1,12 +1,12 @@
 import { Response } from "express";
 import { RequestWithParamsAndBody } from "../../types/common-types";
-import { UpdateVideoModel, videoIdModel } from "../../models/videos";
+import { UpdateVideoModel, VideoIdModel } from "../../models/videos";
 import { db } from "../../db/db";
 import { HTTP_STATUSES } from "../../app/settings";
 import { inputValidation, isResolutionCorrect } from "../../utils/common";
 
 export const updateVideo = (
-  req: RequestWithParamsAndBody<videoIdModel, UpdateVideoModel>,
+  req: RequestWithParamsAndBody<VideoIdModel, UpdateVideoModel>,
   res: Response,
 ) => {
   let video = db.videos.find((c) => c.id === +req.params.id);

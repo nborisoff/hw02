@@ -1,4 +1,4 @@
-import {RESOLUTIONS} from "../const/videos";
+import { RESOLUTIONS } from "../const/videos";
 
 export type VideoDBType = {
   id: number;

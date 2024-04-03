@@ -1,24 +1,29 @@
-// import {VideoDBType} from './video-db-type'
-
-import {VideoDBType} from "../types/videos";
+import { VideoDBType } from "../types/videos";
+import { PostDBType } from "../types/posts";
+import { BlogDBType } from "../types/blogs";
 
 export type DBType = {
-    videos: VideoDBType[];
-    // some: any[]
-}
+  videos: VideoDBType[];
+  posts: PostDBType[];
+  blogs: BlogDBType[];
+};
 
 export const db: DBType = {
-    videos: [],
-    // some: []
-}
+  videos: [],
+  posts: [],
+  blogs: [],
+};
 
-export const setDB = (dataset?: Partial<DBType>) => {
-    if (!dataset) {
-        db.videos = []
-        // db.some = []
-        return
-    }
-
-    db.videos = dataset.videos || db.videos
-    // db.some = dataset.some || db.some
-}
+export const setDB = (
+  endpoint: keyof DBType,
+  dataset?: DBType[keyof DBType],
+) => {
+  if (!dataset) {
+    db.videos = [];
+    db.posts = [];
+    db.blogs = [];
+    return;
+  }
+// разобраться с типом
+  db[endpoint] = dataset as any;
+};

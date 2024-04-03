@@ -6,7 +6,7 @@ export type InputVideoType = {
   availableResolutions?: VideoDBType["availableResolutions"];
 };
 
-export type videoIdModel = {
+export type VideoIdModel = {
   /**
    * id существующего курса
    */
