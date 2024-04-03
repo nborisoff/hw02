@@ -13,6 +13,8 @@ const postTitleInputValidator = body("title")
   .withMessage("field not exist")
   .isString()
   .withMessage("not string")
+  .notEmpty()
+  .withMessage("field is empty")
   .isLength({ max: 100 })
   .withMessage("length limit exceeded");
 const postShortDescriptionInputValidator = body("shortDescription")
@@ -20,6 +22,8 @@ const postShortDescriptionInputValidator = body("shortDescription")
   .withMessage("field not exist")
   .isString()
   .withMessage("not string")
+  .notEmpty()
+  .withMessage("field is empty")
   .isLength({ max: 100 })
   .withMessage("length limit exceeded");
 const postContentInputValidator = body("content")
@@ -27,13 +31,17 @@ const postContentInputValidator = body("content")
   .withMessage("field not exist")
   .isString()
   .withMessage("not string")
+  .notEmpty()
+  .withMessage("field is empty")
   .isLength({ max: 1000 })
   .withMessage("length limit exceeded");
 const postBlogIdInputValidator = body("blogId")
   .exists()
   .withMessage("field not exist")
   .isString()
-  .withMessage("not string");
+  .withMessage("not string")
+  .notEmpty()
+  .withMessage("field is empty");
 
 export const postInputValidators = [
   postTitleInputValidator,
@@ -58,12 +66,12 @@ export const inputCheckErrorsMiddleware = (
 ) => {
   const e = validationResult(req);
   const errors = e.array({ onlyFirstError: true });
-console.log(errors)
+  console.log(errors);
   if (errors.length) {
     res.status(400).json({
       errorsMessages: errors.map((error) => {
         const { msg, path } = error as FieldValidationError;
-        return { message: `${path} error`, field: path};
+        return { message: `${path} error`, field: path };
       }),
     });
     return;
