@@ -63,7 +63,7 @@ console.log(errors)
     res.status(400).json({
       errorsMessages: errors.map((error) => {
         const { msg, path } = error as FieldValidationError;
-        return { message: `${path} error`, field: path, description: msg };
+        return { message: `${path} error`, field: path};
       }),
     });
     return;
