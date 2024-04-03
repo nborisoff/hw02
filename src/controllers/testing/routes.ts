@@ -4,4 +4,4 @@ import { authMiddleware } from "../posts/middlewares";
 
 export const testingRouter = Router();
 
-testingRouter.delete("/all-data", clearDb);
+testingRouter.delete("/all-data", authMiddleware, clearDb);
