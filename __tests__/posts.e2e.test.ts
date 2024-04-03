@@ -12,15 +12,6 @@ describe("/post", () => {
   beforeAll(async () => {
     // setDB();
     await req.delete("/testing/all-data");
-    await req
-      .post(SETTINGS.PATH.POSTS)
-      .set({ Authorisation: "Basic " + codedAuth })
-      .send({
-        name: "new blog",
-        websiteUrl: "https://someurl.com",
-        description: "description",
-      })
-      .expect(201);
   });
 
   const buff2 = Buffer.from(ADMIN_AUTH, "utf8");
@@ -40,7 +31,7 @@ describe("/post", () => {
     setDB("blogs", existedBlogDataset);
 
     const newPost = {
-      title: "testP",
+      title: "   ",
       shortDescription: "testSD",
       content: "testC",
       blogId: "1",
@@ -50,7 +41,7 @@ describe("/post", () => {
 
     const res = await req
       .post(SETTINGS.PATH.POSTS)
-      .set({ Authorisation: "Basic " + codedAuth })
+      .set({ Authorization: "Basic " + codedAuth })
       .send(newPost)
       .expect(201);
 
@@ -63,7 +54,7 @@ describe("/post", () => {
 
     await req
       .put(`${SETTINGS.PATH.POSTS}/1`)
-      .set({ Authorisation: "Basic " + codedAuth })
+      .set({ Authorization: "Basic " + codedAuth })
       .send({
         title: "testP2",
         shortDescription: "testSD2",
@@ -77,7 +68,7 @@ describe("/post", () => {
     setDB("posts", existedPostDataset);
     await req
       .delete(`${SETTINGS.PATH.TESTING}/all-data`)
-      .set({ Authorisation: "Basic " + codedAuth })
+      .set({ Authorization: "Basic " + codedAuth })
       .expect(204);
     await req.get(SETTINGS.PATH.POSTS).expect(200, []);
   });
@@ -85,7 +76,7 @@ describe("/post", () => {
   it("should return 404 after trying deleting non-existent post", async () => {
     await req
       .delete(`${SETTINGS.PATH.POSTS}/9999`)
-      .set({ Authorisation: "Basic " + codedAuth })
+      .set({ Authorization: "Basic " + codedAuth })
       .expect(404);
   });
 
@@ -93,12 +84,12 @@ describe("/post", () => {
     setDB("posts", existedPostDataset);
     await req
       .delete(`${SETTINGS.PATH.POSTS}/1`)
-      .set({ Authorisation: "Basic " + codedAuth })
+      .set({ Authorization: "Basic " + codedAuth })
       .expect(204);
     await req.get(`${SETTINGS.PATH.POSTS}/1`).expect(404);
   });
 
   // it("should return empty array after deleting", async () => {
-  //   await req.delete(`${SETTINGS.PATH.TESTING}/all-data`).set({ Authorisation: "Basic " + codedAuth }).expect(204);
+  //   await req.delete(`${SETTINGS.PATH.TESTING}/all-data`).set({ Authorization: "Basic " + codedAuth }).expect(204);
   // });
 });

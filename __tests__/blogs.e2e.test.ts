@@ -17,7 +17,7 @@ describe("/post", () => {
   it("auth: should get empty array", async () => {
     const res = await req
       .get(SETTINGS.PATH.BLOGS)
-      .set({ Authorisation: "Basic " + codedAuth })
+      .set({ Authorization: "Basic " + codedAuth })
       .expect(200);
 
     // console.log(res.body)
@@ -37,7 +37,7 @@ describe("/post", () => {
 
     const res = await req
       .post(SETTINGS.PATH.BLOGS)
-      .set({ Authorisation: "Basic " + codedAuth })
+      .set({ Authorization: "Basic " + codedAuth })
       .send(newBlog)
       .expect(201);
 
@@ -51,7 +51,7 @@ describe("/post", () => {
 
     await req
       .put(`${SETTINGS.PATH.BLOGS}/1`)
-      .set({ Authorisation: "Basic " + codedAuth })
+      .set({ Authorization: "Basic " + codedAuth })
       .send({
         name: "blog1",
         description: "d1",
@@ -63,7 +63,7 @@ describe("/post", () => {
   it("should return empty array after deleting blog", async () => {
     setDB("blogs", existedBlogDataset);
     await req
-      .delete(`${SETTINGS.PATH.TESTING}/all-data`).set({ Authorisation: "Basic " + codedAuth })
+      .delete(`${SETTINGS.PATH.TESTING}/all-data`).set({ Authorization: "Basic " + codedAuth })
       .expect(204);
     await req.get(SETTINGS.PATH.BLOGS).expect(200, []);
   });
@@ -71,7 +71,7 @@ describe("/post", () => {
   it("should return 404 after trying deleting non-existent blog", async () => {
     await req
       .delete(`${SETTINGS.PATH.BLOGS}/9999`)
-      .set({ Authorisation: "Basic " + codedAuth })
+      .set({ Authorization: "Basic " + codedAuth })
       .expect(404);
   });
 
@@ -79,7 +79,7 @@ describe("/post", () => {
     setDB("blogs", existedBlogDataset);
     await req
       .delete(`${SETTINGS.PATH.BLOGS}/1`)
-      .set({ Authorisation: "Basic " + codedAuth })
+      .set({ Authorization: "Basic " + codedAuth })
       .expect(204);
     await req.get(`${SETTINGS.PATH.BLOGS}/1`).expect(404);
   });
