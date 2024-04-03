@@ -16,19 +16,19 @@ describe("/videos", () => {
   });
 
   it("should get not empty array", async () => {
-    setDB(existedVideoDataset);
+    setDB("videos", existedVideoDataset);
     const res = await req.get(SETTINGS.PATH.VIDEOS).expect(200);
     expect(res.body.length).toBe(1);
-    expect(res.body[0]).toEqual(existedVideoDataset.videos[0]);
+    expect(res.body[0]).toEqual(existedVideoDataset[0]);
   });
 
   it("should return existing video", async () => {
-    setDB(existedVideoDataset);
+    setDB("videos", existedVideoDataset);
     await req.get(`${SETTINGS.PATH.VIDEOS}/1`).expect(200);
   });
 
   it("should return 404 for not existing video", async () => {
-    setDB(existedVideoDataset);
+    setDB("videos", existedVideoDataset);
     await req.get(`${SETTINGS.PATH.VIDEOS}/999`).expect(404);
   });
 
@@ -45,13 +45,13 @@ describe("/videos", () => {
     // expect(res.body.availableResolutions[0]).toEqual(
     //   newVideo.availableResolutions[0],
     // );
-    const res1 = await req.get(`${SETTINGS.PATH.VIDEOS}/${res.body.id}`).expect(200);
-
+    const res1 = await req
+      .get(`${SETTINGS.PATH.VIDEOS}/${res.body.id}`)
+      .expect(200);
   });
 
-
   it(`should update video`, async () => {
-    setDB(existedVideoDataset);
+    setDB("videos", existedVideoDataset);
 
     await req
       .put(`${SETTINGS.PATH.VIDEOS}/1`)
@@ -67,7 +67,7 @@ describe("/videos", () => {
   });
 
   it("should return empty array after deleting", async () => {
-    setDB(existedVideoDataset);
+    setDB("videos", existedVideoDataset);
     await req.delete(`${SETTINGS.PATH.TESTING}/all-data`).expect(204);
     await req.get(SETTINGS.PATH.VIDEOS).expect(200, []);
   });
@@ -76,8 +76,8 @@ describe("/videos", () => {
     await req.delete(`${SETTINGS.PATH.VIDEOS}/9999`).expect(404);
   });
 
-  it("should return 404 after  deleting  video", async () => {
-    setDB(existedVideoDataset);
+  it("should return 404 after deleting video", async () => {
+    setDB("videos", existedVideoDataset);
     await req.delete(`${SETTINGS.PATH.VIDEOS}/1`).expect(204);
     await req.get(`${SETTINGS.PATH.VIDEOS}/1`).expect(404);
   });

@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import { db } from "../../db/db";
 import { VideoDBType } from "../../types/videos";
-import { RequestWithParams, RequestWithQuery } from "../../types/common-types";
-import { videoIdModel } from "../../models/videos";
+import { RequestWithQuery } from "../../types/common-types";
 import {HTTP_STATUSES} from "../../app/settings";
-// import {OutputVideoType} from '../input-output-models/video-models'
 
 export const getVideos = (
   req: Request<RequestWithQuery<VideoDBType>>,
