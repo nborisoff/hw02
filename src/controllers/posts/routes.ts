@@ -12,7 +12,7 @@ export const postRouter = Router();
 postRouter.get("/", getPosts);
 postRouter.post(
   "/",
-  authMiddleware,
+  // authMiddleware,
   ...postInputValidators,
   inputCheckErrorsMiddleware,
   createPost,
@@ -20,9 +20,11 @@ postRouter.post(
 postRouter.get("/:id", findPost);
 postRouter.put(
   "/:id",
-  authMiddleware,
+  // authMiddleware,
   ...postInputValidators,
   inputCheckErrorsMiddleware,
   updatePost,
 );
-postRouter.delete("/:id", authMiddleware, deletePost);
+postRouter.delete("/:id",
+    // authMiddleware,
+    deletePost);

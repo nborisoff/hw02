@@ -15,7 +15,7 @@ export const blogRouter = Router();
 blogRouter.get("/", getBlogs);
 blogRouter.post(
   "/",
-  authMiddleware,
+  // authMiddleware,
   ...blogInputValidators,
   inputCheckErrorsMiddleware,
   createBlog,
@@ -23,9 +23,11 @@ blogRouter.post(
 blogRouter.get("/:id", findBlog);
 blogRouter.put(
   "/:id",
-  authMiddleware,
+  // authMiddleware,
   ...blogInputValidators,
   inputCheckErrorsMiddleware,
   updateBlog,
 );
-blogRouter.delete("/:id", authMiddleware, deleteBlog);
+blogRouter.delete("/:id",
+    // authMiddleware,
+    deleteBlog);

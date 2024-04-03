@@ -2,34 +2,38 @@ import { req } from "./test-helpers";
 import { ADMIN_AUTH } from "../src/controllers/posts/middlewares";
 import { SETTINGS } from "../src/app/settings";
 import { setDB } from "../src/db/db";
-import { existedBlogDataset, existedPostDataset } from "../src/db/datasets";
+import {
+  existedBlogDataset,
+  existedPostDataset,
+} from "../src/db/datasets";
 
-console.log(process.env.NODE_ENV);
+// console.log(process.env.NODE_ENV);
 describe("/post", () => {
   beforeAll(async () => {
     // setDB();
     await req.delete("/testing/all-data");
+    await req
+      .post(SETTINGS.PATH.POSTS)
+      .set({ Authorisation: "Basic " + codedAuth })
+      .send({
+        name: "new blog",
+        websiteUrl: "https://someurl.com",
+        description: "description",
+      })
+      .expect(201);
   });
 
   const buff2 = Buffer.from(ADMIN_AUTH, "utf8");
   const codedAuth = buff2.toString("base64");
 
-  it("auth: should get empty array", async () => {
+  it("should get empty array", async () => {
     const res = await req
       .get(SETTINGS.PATH.POSTS)
-      .set({ Authorisation: "Basic " + codedAuth })
       .expect(200);
 
     // console.log(res.body)
 
     // expect(res.body.length).toBe(0)
-  });
-
-  it("should get empty array", async () => {
-    await req
-      .get(SETTINGS.PATH.POSTS)
-      .set({ Authorisation: "Basic " + codedAuth })
-      .expect(200, []);
   });
 
   it("should create post", async () => {
@@ -93,4 +97,8 @@ describe("/post", () => {
       .expect(204);
     await req.get(`${SETTINGS.PATH.POSTS}/1`).expect(404);
   });
+
+  // it("should return empty array after deleting", async () => {
+  //   await req.delete(`${SETTINGS.PATH.TESTING}/all-data`).set({ Authorisation: "Basic " + codedAuth }).expect(204);
+  // });
 });
