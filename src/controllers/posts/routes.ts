@@ -25,6 +25,4 @@ postRouter.put(
   inputCheckErrorsMiddleware,
   updatePost,
 );
-postRouter.delete("/:id",
-    authMiddleware,
-    deletePost);
+postRouter.delete("/:id", authMiddleware, deletePost);

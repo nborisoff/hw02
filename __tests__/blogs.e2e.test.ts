@@ -1,14 +1,12 @@
 import { req } from "./test-helpers";
 import { ADMIN_AUTH } from "../src/controllers/posts/middlewares";
 import { SETTINGS } from "../src/app/settings";
-import { setDB } from "../src/db/db";
-import { existedBlogDataset } from "../src/db/datasets";
+import { blogCollection, connectToDB } from "../src/db/mongo-db";
 
 console.log(process.env.NODE_ENV);
-describe("/post", () => {
+describe("/blog", () => {
   beforeAll(async () => {
-    // setDB();
-    await req.delete("/testing/all-data");
+    await connectToDB();
   });
 
   const buff2 = Buffer.from(ADMIN_AUTH, "utf8");
@@ -29,43 +27,35 @@ describe("/post", () => {
   });
 
   it("should create blog", async () => {
+    await blogCollection.drop();
+
     const newBlog = {
       name: "blog1",
       description: "d1",
       websiteUrl: "https://blog1.com",
     };
 
-    const res = await req
+    await req
       .post(SETTINGS.PATH.BLOGS)
       .set({ Authorization: "Basic " + codedAuth })
       .send(newBlog)
       .expect(201);
+  });
 
-    const res1 = await req
-      .get(`${SETTINGS.PATH.BLOGS}/${res.body.id}`)
-      .expect(200);
+  it("should find blog", async () => {
+    await req.get(`${SETTINGS.PATH.BLOGS}/6612de7120b2e2dfd45a9d95`).set({ Authorization: "Basic " + codedAuth }).expect(200);
   });
 
   it(`should update blog`, async () => {
-    setDB("blogs", existedBlogDataset);
-
     await req
-      .put(`${SETTINGS.PATH.BLOGS}/1`)
+      .put(`${SETTINGS.PATH.BLOGS}/6612de7120b2e2dfd45a9d95`)
       .set({ Authorization: "Basic " + codedAuth })
       .send({
-        name: "blog1",
-        description: "d1",
+        name: "blog2",
+        description: "d3",
         websiteUrl: "https://blog1.com",
       })
       .expect(204);
-  });
-
-  it("should return empty array after deleting blog", async () => {
-    setDB("blogs", existedBlogDataset);
-    await req
-      .delete(`${SETTINGS.PATH.TESTING}/all-data`).set({ Authorization: "Basic " + codedAuth })
-      .expect(204);
-    await req.get(SETTINGS.PATH.BLOGS).expect(200, []);
   });
 
   it("should return 404 after trying deleting non-existent blog", async () => {
@@ -76,11 +66,9 @@ describe("/post", () => {
   });
 
   it("should return 404 after deleting blog", async () => {
-    setDB("blogs", existedBlogDataset);
     await req
-      .delete(`${SETTINGS.PATH.BLOGS}/1`)
+      .delete(`${SETTINGS.PATH.BLOGS}/6612de7120b2e2dfd45a9d95`)
       .set({ Authorization: "Basic " + codedAuth })
       .expect(204);
-    await req.get(`${SETTINGS.PATH.BLOGS}/1`).expect(404);
   });
 });

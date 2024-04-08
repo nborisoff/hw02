@@ -1,18 +1,26 @@
-import { Response } from "express";
-import { RequestWithParams } from "../../types/common-types";
-import { BlogIdModel } from "../../models/blogs";
-import { db } from "../../db/db";
+import { Request, Response } from "express";
 import { HTTP_STATUSES } from "../../app/settings";
+import { blogRepository } from "./blogRepository";
+import { ObjectId } from "mongodb";
 
-export const deleteBlog = (req: RequestWithParams<BlogIdModel>, res: Response) => {
-  const index = db.blogs.findIndex((item) => item.id === req.params.id);
+export const deleteBlog = async (
+  // req: RequestWithParams<BlogIdModel>,
+  req: Request,
+  res: Response,
+) => {
+  let foundBlog = await blogRepository.find(new ObjectId(req.params.id));
 
-  if (index === -1) {
+  if (!foundBlog) {
     res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     return;
   }
 
-  db.blogs.splice(index, 1);
+  let deletedBlog = await blogRepository.delete(foundBlog._id);
+
+  if (!deletedBlog) {
+    res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
+    return;
+  }
 
   res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
 };

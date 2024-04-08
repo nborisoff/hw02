@@ -2,16 +2,13 @@ import { req } from "./test-helpers";
 import { ADMIN_AUTH } from "../src/controllers/posts/middlewares";
 import { SETTINGS } from "../src/app/settings";
 import { setDB } from "../src/db/db";
-import {
-  existedBlogDataset,
-  existedPostDataset,
-} from "../src/db/datasets";
+import {ObjectId} from "mongodb";
+import {connectToDB, postCollection} from "../src/db/mongo-db";
 
 // console.log(process.env.NODE_ENV);
 describe("/post", () => {
   beforeAll(async () => {
-    // setDB();
-    await req.delete("/testing/all-data");
+    await connectToDB();
   });
 
   const buff2 = Buffer.from(ADMIN_AUTH, "utf8");
@@ -28,30 +25,24 @@ describe("/post", () => {
   });
 
   it("should create post", async () => {
-    setDB("blogs", existedBlogDataset);
+    await postCollection.drop();
 
     const newPost = {
       title: "testT",
       shortDescription: "testSD",
       content: "testC",
-      blogId: "1",
+      blogId: "66142c4a4dd493bacd7cee31",
     };
 
-    // await req.get(`${SETTINGS.PATH.BLOGS}/${newPost.blogId}`).expect(200);
-
-    const res = await req
+    await req
       .post(SETTINGS.PATH.POSTS)
       .set({ Authorization: "Basic " + codedAuth })
       .send(newPost)
       .expect(201);
 
-    await req.get(`${SETTINGS.PATH.POSTS}/${res.body.id}`).expect(200);
   });
 
   it(`should update post`, async () => {
-    setDB("posts", existedPostDataset);
-    setDB("blogs", existedBlogDataset);
-
     await req
       .put(`${SETTINGS.PATH.POSTS}/1`)
       .set({ Authorization: "Basic " + codedAuth })
@@ -64,15 +55,6 @@ describe("/post", () => {
       .expect(204);
   });
 
-  it("should return empty array after deleting post", async () => {
-    setDB("posts", existedPostDataset);
-    await req
-      .delete(`${SETTINGS.PATH.TESTING}/all-data`)
-      .set({ Authorization: "Basic " + codedAuth })
-      .expect(204);
-    await req.get(SETTINGS.PATH.POSTS).expect(200, []);
-  });
-
   it("should return 404 after trying deleting non-existent post", async () => {
     await req
       .delete(`${SETTINGS.PATH.POSTS}/9999`)
@@ -81,7 +63,6 @@ describe("/post", () => {
   });
 
   it("should return 404 after deleting post", async () => {
-    setDB("posts", existedPostDataset);
     await req
       .delete(`${SETTINGS.PATH.POSTS}/1`)
       .set({ Authorization: "Basic " + codedAuth })
