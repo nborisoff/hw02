@@ -32,7 +32,7 @@ describe("/post", () => {
 
     const newPost = {
       title: "testT",
-      shortDescription: "testSD",
+      shortDescription: '"',
       content: "testC",
       blogId: "1",
     };
@@ -44,7 +44,7 @@ describe("/post", () => {
       .set({ Authorization: "Basic " + codedAuth })
       .send(newPost)
       .expect(201);
-
+console.log(res.body)
     await req.get(`${SETTINGS.PATH.POSTS}/${res.body.id}`).expect(200);
   });
 
