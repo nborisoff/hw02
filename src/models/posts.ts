@@ -1,13 +1,20 @@
-export type PostIdModel = {
-    /**
-     * id существующего курса
-     */
-    id: string;
+import { ObjectId } from "mongodb";
+
+export type PostDBType = {
+  _id: ObjectId;
+  title: string;
+  shortDescription: string;
+  content: string;
+  blogId: ObjectId;
+  blogName: string;
+  createdAt?: string;
 };
 
-export type CreatePostType = {
-    title: string;
-    shortDescription: string;
-    content: string;
-    blogId: string;
+export type PostIdModel = {
+  id: ObjectId;
 };
+
+export type PostInputType = Pick<
+  PostDBType,
+  "title" | "shortDescription" | "content" | "blogId"
+>;

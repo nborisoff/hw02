@@ -1,20 +1,9 @@
-import { Request, Response, NextFunction } from "express";
-import { db } from "../../db/db";
-import { RequestWithQuery } from "../../types/common-types";
+import { Request, Response } from "express";
 import { HTTP_STATUSES } from "../../app/settings";
-import { PostDBType } from "../../types/posts";
-// import {OutputVideoType} from '../input-output-models/video-models'
+import { postCollection } from "../../db/mongo-db";
 
-export const getPosts = (
-  req: Request,
-  res: Response<PostDBType[]>,
-  next: NextFunction,
-) => {
-  let posts = db.posts;
-
-  res.status(HTTP_STATUSES.OK_200).json(
-    posts.map((video) => {
-      return video;
-    }),
-  );
+export const getPosts = async (req: Request, res: Response) => {
+  res
+    .status(HTTP_STATUSES.OK_200)
+    .json(await postCollection.find({}).toArray());
 };

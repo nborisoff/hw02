@@ -4,11 +4,13 @@ config();
 export const SETTINGS = {
   PORT: process.env.PORT || 3003,
   PATH: {
-    VIDEOS: "/videos",
     POSTS: "/posts",
     BLOGS: "/blogs",
-    TESTING: "/testing",
   },
+  MONGO_URL: process.env.MONGO_URL || "mongodb://localhost:27017",
+  DB_NAME: process.env.DB_NAME || "local",
+  BLOG_COLLECTION_NAME: process.env.BLOG_COLLECTION_NAME || "blog",
+  POST_COLLECTION_NAME: process.env.POST_COLLECTION_NAME || "post",
 };
 
 export const HTTP_STATUSES = {

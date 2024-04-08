@@ -1,25 +1,26 @@
-import { Response } from "express";
-import { RequestWithParamsAndBody } from "../../types/common-types";
-import { CreateBlogType, BlogIdModel } from "../../models/blogs";
-import { db } from "../../db/db";
+import { Request, Response } from "express";
 import { HTTP_STATUSES } from "../../app/settings";
+import { blogRepository } from "./blogRepository";
+import { ObjectId } from "mongodb";
 
-export const updateBlog = (
-  req: RequestWithParamsAndBody<BlogIdModel, CreateBlogType>,
+export const updateBlog = async (
+  // req: RequestWithParamsAndBody<BlogIdModel, BlogInputType>,
+  req: Request,
   res: Response,
 ) => {
-  let blog = db.blogs.find((c) => c.id === req.params.id);
+  let foundBlog = await blogRepository.find(new ObjectId(req.params.id));
 
-  if (!blog) {
+  if (!foundBlog) {
     res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     return;
   }
 
-  let { name, description, websiteUrl } = req.body;
+  let updatedBlog = await blogRepository.update(foundBlog._id, req.body);
 
-  blog.name = name;
-  blog.description = description;
-  blog.websiteUrl = websiteUrl;
+  if (!updatedBlog) {
+    res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
+    return;
+  }
 
   res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
 };

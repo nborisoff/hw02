@@ -1,26 +1,26 @@
-import { Response } from "express";
-import { RequestWithParamsAndBody } from "../../types/common-types";
-import { CreatePostType, PostIdModel } from "../../models/posts";
-import { db } from "../../db/db";
+import { Request, Response } from "express";
 import { HTTP_STATUSES } from "../../app/settings";
+import { postRepository } from "../posts/postRepository";
+import { ObjectId } from "mongodb";
 
-export const updatePost = (
-  req: RequestWithParamsAndBody<PostIdModel, CreatePostType>,
+export const updatePost = async (
+  // req: RequestWithParamsAndBody<PostIdModel, PostInputType>,
+  req: Request,
   res: Response,
 ) => {
-  let post = db.posts.find((c) => c.id === req.params.id);
+  let foundPost = await postRepository.find(new ObjectId(req.params.id));
 
-  if (!post) {
+  if (!foundPost) {
     res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     return;
   }
 
-  let { title, shortDescription, content, blogId } = req.body;
+  let updatedPost = await postRepository.update(foundPost._id, req.body);
 
-  post.title = title;
-  post.shortDescription = shortDescription;
-  post.content = content;
-  post.blogId = blogId;
+  if (!updatedPost) {
+    res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
+    return;
+  }
 
   res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
 };

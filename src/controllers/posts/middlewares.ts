@@ -52,15 +52,15 @@ export const postInputValidators = [
   postShortDescriptionInputValidator,
   postContentInputValidator,
   postBlogIdInputValidator,
-  body("blogId")
-    .custom(async (blogId, { req }) => {
-      const blog = await blogRepository.find(blogId);
-
-      if (!blog) {
-        return Promise.reject("blog not found");
-      }
-    })
-    .withMessage("blog not found"),
+  // body("blogId")
+  //   .custom(async (blogId, { req }) => {
+  //     const blog = await blogRepository.find(blogId);
+  //
+  //     if (!blog) {
+  //       return Promise.reject("blog not found");
+  //     }
+  //   })
+  //   .withMessage("blog not found"),
 ];
 
 export const inputCheckErrorsMiddleware = (
@@ -70,7 +70,7 @@ export const inputCheckErrorsMiddleware = (
 ) => {
   const e = validationResult(req);
   const errors = e.array({ onlyFirstError: true });
-  console.log(errors);
+
   if (errors.length) {
     res.status(400).json({
       errorsMessages: errors.map((error) => {
@@ -84,7 +84,7 @@ export const inputCheckErrorsMiddleware = (
   next();
 };
 
-export const ADMIN_AUTH = "admin:qwerty"; // get from SETTINGS
+export const ADMIN_AUTH = "quackin:passw1rd"; // get from SETTINGS
 export const authMiddleware = (
   req: Request,
   res: Response,

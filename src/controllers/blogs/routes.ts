@@ -2,10 +2,7 @@ import { Router } from "express";
 import { getBlogs } from "./getBlogsController";
 import { authMiddleware } from "../posts/middlewares";
 import { createBlog } from "./createBlogController";
-import {
-  blogInputValidators,
-  inputCheckErrorsMiddleware,
-} from "./middlewares";
+import { blogInputValidators, inputCheckErrorsMiddleware } from "./middlewares";
 import { findBlog } from "./findBlogController";
 import { updateBlog } from "./updateBlogController";
 import { deleteBlog } from "./deleteBlogController";
@@ -28,6 +25,4 @@ blogRouter.put(
   inputCheckErrorsMiddleware,
   updateBlog,
 );
-blogRouter.delete("/:id",
-    authMiddleware,
-    deleteBlog);
+blogRouter.delete("/:id", authMiddleware, deleteBlog);
